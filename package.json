@@ -1,0 +1,23 @@
+{
+    "name": "flag-submission",
+    "version": "1.0.0",
+    "private": true,
+    "workspaces": [
+      "frontend",
+      "backend"
+    ],
+    "scripts": {
+      "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+      "start:backend": "npm run start --workspace=backend",
+      "start:frontend": "npm run start --workspace=frontend",
+      "install:backend": "npm install --workspace=backend",
+      "install:frontend": "npm install --workspace=frontend",
+      "build:frontend": "npm run build --workspace=frontend",
+      "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+      "dev:backend": "npm run dev --workspace=backend",
+      "dev:frontend": "npm run start --workspace=frontend"
+    },
+    "devDependencies": {
+      "concurrently": "^8.2.0"
+    }
+  }
