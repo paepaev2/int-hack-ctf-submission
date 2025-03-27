@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../index.css';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
-import { submitAnswer, getLeaderboard } from '../services/apiService';
+import { submitAnswer, getLeaderboard, checkUsername } from '../services/apiService';
 
 const FlagSubmission = () => {
   const [username, setUsername] = useState('');
@@ -26,10 +26,18 @@ const FlagSubmission = () => {
     fetchLeaderboard();
   }, []);
 
-  const handleUsernameSubmit = () => {
+  const handleUsernameSubmit = async () => {
     if (username.trim()) {
-      setUsernameSubmitted(true);
-      setError('');
+      try {
+        const response = await checkUsername(username);
+        if (response.exists) {
+          setCompletedTasks(response.completedTasks || {});
+        }
+        setUsernameSubmitted(true);
+        setError('');
+      } catch {
+        setError('Error checking username');
+      }
     } else {
       setError('Username cannot be empty');
     }

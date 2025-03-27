@@ -23,3 +23,14 @@ export const getLeaderboard = async () => {
     throw error.response?.data || new Error('Failed to fetch leaderboard');
   }
 };
+
+export const checkUsername = async (username) => {
+    try {
+      const response = await axios.get(`${API_URL}/check-username`, {
+        params: { username }
+      });
+      return response.data; // { exists: true/false, completedTasks: {TASK_A: true, TASK_B: false, ...} }
+    } catch (error) {
+      return { exists: false, completedTasks: {} };
+    }
+  };
