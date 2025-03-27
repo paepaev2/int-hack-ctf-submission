@@ -1,14 +1,14 @@
 import Answer from '../models/Answer.js';
 
 const CORRECT_ANSWERS = {
-  'TASK A': 'answer1',
-  'TASK B': 'answer2',
-  'TASK C': 'answer3',
-  'TASK D': 'answer4',
-  'TASK E': 'answer5',
-  'TASK F': 'answer6',
-  'TASK G': 'answer7',
-  'TASK H': 'answer8'
+  'PROBLEM 1': 'SPAGHETTI',
+  'PROBLEM 2': 'CONAN',
+  'PROBLEM 3': 'Hello_web_developer',
+  'PROBLEM 4': '08934821',
+  'PROBLEM 5': 'HTTP_POST_the_flAg',
+  'PROBLEM 6': 'i_XOR_y0u',
+  'PROBLEM 7': 'ILOVEDOG',
+  'PROBLEM 8': 'STEVE'
 };
 
 export const seedAnswers = async () => {

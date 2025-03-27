@@ -11,14 +11,14 @@ router.post('/submit-answer', async (req, res) => {
     // Find the correct answer
     const correctAnswerDoc = await Answer.findOne({ task });
     if (!correctAnswerDoc) {
-      return res.status(404).json({ success: false, message: 'Task not found' });
+      return res.status(404).json({ success: false, message: 'PROBLEM not found' });
     }
 
     // Check if answer is correct
     const isCorrect = answer.trim() === correctAnswerDoc.correctAnswer.trim();
 
     if (!isCorrect) {
-      return res.status(400).json({ success: false, message: 'Incorrect answer' });
+      return res.status(400).json({ success: false, message: 'Incorrect FLAG' });
     }
 
     // Find or create user
@@ -29,7 +29,7 @@ router.post('/submit-answer', async (req, res) => {
 
     // Prevent duplicate task submission
     if (user.completedTasks?.get(task)) {
-      return res.status(400).json({ success: false, message: 'Task already completed' });
+      return res.status(400).json({ success: false, message: 'PROBLEM already completed' });
     }
 
     // Update user's completed tasks
@@ -67,7 +67,7 @@ router.post('/submit-answer', async (req, res) => {
 
     res.json({
       success: true, 
-      message: 'Answer submitted successfully',
+      message: 'FLAG submitted successfully',
       timestamp: new Date(),
       leaderboard: leaderboard.map(u => ({
         username: u.username,

@@ -36,10 +36,10 @@ const FlagSubmission = () => {
         setUsernameSubmitted(true);
         setError('');
       } catch {
-        setError('Error checking username');
+        setError('Error checking name');
       }
     } else {
-      setError('Username cannot be empty');
+      setError('Name cannot be empty');
     }
   };
 
@@ -56,10 +56,10 @@ const FlagSubmission = () => {
         }));
 
         setLeaderboard(response.leaderboard);
-        alert('Correct answer submitted!');
+        alert('Correct FLAG submitted!');
       }
     } catch (error) {
-      alert(error.message || 'Failed to submit answer');
+      alert(error.message || 'Failed to submit FLAG');
     }
   };
 
@@ -81,7 +81,7 @@ const FlagSubmission = () => {
       <h2 className="text-xl mb-2 font-semibold text-gray-800">{task}</h2>
       <div className="flex items-center gap-2">
         <Input 
-          placeholder={`Enter answer for ${task}`}
+          placeholder={`Enter FLAG for ${task}`}
           value={answers[task] || ''}
           onChange={(e) => setAnswers(prev => ({ ...prev, [task]: e.target.value }))}
           onKeyDown={(e) => e.key === 'Enter' && handleAnswerSubmit(task)}
@@ -184,7 +184,7 @@ const FlagSubmission = () => {
           {usernameSubmitted && (
             <>
               <div className="space-y-4">
-                {['TASK A', 'TASK B', 'TASK C', 'TASK D', 'TASK E', 'TASK F', 'TASK G', 'TASK H'].map(renderTaskInput)}
+                {['PROBLEM 1', 'PROBLEM 2', 'PROBLEM 3', 'PROBLEM 4', 'PROBLEM 5', 'PROBLEM 6', 'PROBLEM 7', 'PROBLEM 8'].map(renderTaskInput)}
               </div>
               
               {renderLeaderboard()}

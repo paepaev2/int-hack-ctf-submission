@@ -11,7 +11,7 @@ export const submitAnswer = async (username, task, answer) => {
     });
     return response.data;
   } catch (error) {
-    throw error.response?.data || new Error('Failed to submit answer');
+    throw error.response?.data || new Error('Failed to submit FLAG');
   }
 };
 
