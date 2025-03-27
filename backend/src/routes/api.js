@@ -43,9 +43,27 @@ router.post('/submit-answer', async (req, res) => {
     await user.save();
 
     // Get leaderboard
-    const leaderboard = await User.find()
-      .sort({ totalCorrectAnswers: -1, 'completedTasks.timestamp': 1 })
-      .limit(10);
+    const leaderboard = await User.find();
+
+    // Compute the most recent timestamp for each user
+    const leaderboardData = leaderboard.map(u => {
+      const lastCorrectTimestamp = Array.from(u.completedTasks.values())
+        .sort((a, b) => b.timestamp - a.timestamp)[0]?.timestamp;
+
+      return {
+        username: u.username,
+        correctCount: u.totalCorrectAnswers,
+        lastCorrectTimestamp,
+      };
+    });
+
+    // Sort leaderboard by correct answers and then by the most recent timestamp (earlier timestamp ranks higher)
+    leaderboardData.sort((a, b) => {
+        if (b.correctCount === a.correctCount) {
+            return new Date(a.lastCorrectTimestamp) - new Date(b.lastCorrectTimestamp); // Ascending order (earlier timestamp first)
+        }
+        return b.correctCount - a.correctCount; // Descending order (higher correct answers first)
+    });
 
     res.json({
       success: true, 
@@ -64,23 +82,37 @@ router.post('/submit-answer', async (req, res) => {
 });
 
 router.get('/leaderboard', async (req, res) => {
-  try {
-    const leaderboard = await User.find()
-      .sort({ totalCorrectAnswers: -1, 'completedTasks.timestamp': 1 })
-      .limit(10);
-
-    res.json({
-      leaderboard: leaderboard.map(u => ({
-        username: u.username,
-        correctCount: u.totalCorrectAnswers,
-        lastCorrectTimestamp: Array.from(u.completedTasks.values()).pop()?.timestamp
-      }))
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: 'Server error' });
-  }
-});
+    try {
+      const leaderboard = await User.find();
+  
+      // Compute the most recent timestamp for each user
+      const leaderboardData = leaderboard.map(u => {
+        const lastCorrectTimestamp = Array.from(u.completedTasks.values())
+          .sort((a, b) => b.timestamp - a.timestamp)[0]?.timestamp;
+  
+        return {
+          username: u.username,
+          correctCount: u.totalCorrectAnswers,
+          lastCorrectTimestamp,
+        };
+      });
+  
+      // Sort leaderboard by correct answers and then by the most recent timestamp (earlier timestamp ranks higher)
+      leaderboardData.sort((a, b) => {
+        if (b.correctCount === a.correctCount) {
+          return new Date(a.lastCorrectTimestamp) - new Date(b.lastCorrectTimestamp); // Ascending order (earlier timestamp first)
+        }
+        return b.correctCount - a.correctCount; // Descending order (higher correct answers first)
+      });
+  
+      res.json({
+        leaderboard: leaderboardData,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Server error' });
+    }
+});  
 
 router.get('/check-username', async (req, res) => {
     const { username } = req.query;
