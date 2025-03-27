@@ -84,6 +84,7 @@ const FlagSubmission = () => {
           placeholder={`Enter answer for ${task}`}
           value={answers[task] || ''}
           onChange={(e) => setAnswers(prev => ({ ...prev, [task]: e.target.value }))}
+          onKeyDown={(e) => e.key === 'Enter' && handleAnswerSubmit(task)}
           disabled={!usernameSubmitted || completedTasks[task]}
           className="flex-grow"
         />
@@ -151,6 +152,7 @@ const FlagSubmission = () => {
                 placeholder="Enter your username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleUsernameSubmit()}
                 disabled={usernameSubmitted}
                 error={!!error}
               />
