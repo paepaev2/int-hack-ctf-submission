@@ -15,7 +15,7 @@ router.post('/submit-answer', async (req, res) => {
     }
 
     // Check if answer is correct
-    const isCorrect = answer.toLowerCase().trim() === correctAnswerDoc.correctAnswer.toLowerCase().trim();
+    const isCorrect = answer.trim() === correctAnswerDoc.correctAnswer.trim();
 
     if (!isCorrect) {
       return res.status(400).json({ success: false, message: 'Incorrect answer' });
