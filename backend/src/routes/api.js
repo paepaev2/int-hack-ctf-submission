@@ -82,4 +82,24 @@ router.get('/leaderboard', async (req, res) => {
   }
 });
 
+router.get('/check-username', async (req, res) => {
+    const { username } = req.query;
+  
+    try {
+      const user = await User.findOne({ username });
+  
+      if (user) {
+        return res.json({
+          exists: true,
+          completedTasks: user.completedTasks || {} // Send completed tasks
+        });
+      }
+  
+      return res.json({ exists: false, completedTasks: {} });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 export default router;
