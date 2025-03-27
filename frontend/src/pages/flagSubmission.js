@@ -99,18 +99,30 @@ const FlagSubmission = () => {
     </div>
   );
 
+  const refreshLeaderboard = async () => {
+    try {
+      const updatedLeaderboard = await getLeaderboard();
+      setLeaderboard(updatedLeaderboard);
+    } catch (error) {
+      alert('Failed to refresh leaderboard');
+    }
+  };
+
   const renderLeaderboard = () => (
     <div className="mt-8 bg-white rounded-lg shadow-md overflow-hidden">
-      <div className="bg-gray-50 p-4 border-b">
+      <div className="bg-gray-50 p-4 border-b flex justify-between items-center">
         <h2 className="text-2xl font-bold text-gray-800">Leaderboard</h2>
+        <Button onClick={refreshLeaderboard} variant="primary">
+          Refresh
+        </Button>
       </div>
       <table className="w-full">
         <thead>
           <tr className="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
             <th className="py-3 px-4 text-left">Rank</th>
-            <th className="py-3 px-4 text-left">Username</th>
+            <th className="py-3 px-4 text-left">Name</th>
             <th className="py-3 px-4 text-center">Correct Answers</th>
-            <th className="py-3 px-4 text-left">Last Correct Answer</th>
+            <th className="py-3 px-4 text-left">Time</th>
           </tr>
         </thead>
         <tbody className="text-gray-600 text-sm font-light">
@@ -136,7 +148,7 @@ const FlagSubmission = () => {
         </tbody>
       </table>
     </div>
-  );
+  );  
 
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -149,7 +161,7 @@ const FlagSubmission = () => {
           <div className="mb-6">
             <div className="flex space-x-2">
               <Input 
-                placeholder="Enter your username"
+                placeholder="Enter your name"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleUsernameSubmit()}
@@ -161,7 +173,7 @@ const FlagSubmission = () => {
                 disabled={usernameSubmitted}
                 variant={usernameSubmitted ? 'secondary' : 'primary'}
               >
-                {usernameSubmitted ? 'Username Submitted' : 'Submit Username'}
+                {usernameSubmitted ? 'Submitted' : 'Submit'}
               </Button>
             </div>
             {error && (
