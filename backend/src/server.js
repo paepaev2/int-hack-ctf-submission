@@ -14,7 +14,7 @@ app.use(express.json());
 connectDB();
 
 // Routes
-app.use('/api', apiRoutes);
+app.use(apiRoutes);
 
 // Seed initial data
 seedAnswers();
