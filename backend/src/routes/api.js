@@ -4,6 +4,12 @@ import Answer from '../models/Answer.js';
 
 const router = express.Router();
 
+const SCORE_MAP = {
+    'PROBLEM 1': 100, 'PROBLEM 2': 100, 'PROBLEM 3': 100,
+    'PROBLEM 4': 150, 'PROBLEM 5': 150, 'PROBLEM 6': 150,
+    'PROBLEM 7': 200, 'PROBLEM 8': 200
+  };  
+
 router.post('/submit-answer', async (req, res) => {
   try {
     const { username, task, answer } = req.body;
@@ -29,17 +35,18 @@ router.post('/submit-answer', async (req, res) => {
 
     // Prevent duplicate task submission
     if (user.completedTasks?.get(task)) {
-      return res.status(400).json({ success: false, message: 'PROBLEM already completed' });
+        return res.status(400).json({ success: false, message: 'PROBLEM already completed' });
     }
-
+  
     // Update user's completed tasks
     if (!user.completedTasks) user.completedTasks = new Map();
     user.completedTasks.set(task, { 
-      timestamp: new Date(), 
-      answer 
+        timestamp: new Date()
     });
-    user.totalCorrectAnswers = user.completedTasks.size;
-
+  
+    // Update user’s total score
+    user.totalScore += SCORE_MAP[task] || 0;
+  
     await user.save();
 
     // Get leaderboard
@@ -52,17 +59,17 @@ router.post('/submit-answer', async (req, res) => {
 
       return {
         username: u.username,
-        correctCount: u.totalCorrectAnswers,
+        score: u.totalScore,
         lastCorrectTimestamp,
       };
     });
 
     // Sort leaderboard by correct answers and then by the most recent timestamp (earlier timestamp ranks higher)
     leaderboardData.sort((a, b) => {
-        if (b.correctCount === a.correctCount) {
-            return new Date(a.lastCorrectTimestamp) - new Date(b.lastCorrectTimestamp); // Ascending order (earlier timestamp first)
+        if (b.score === a.score) {
+            return new Date(a.lastCorrectTimestamp) - new Date(b.lastCorrectTimestamp); // Earlier timestamp first
         }
-        return b.correctCount - a.correctCount; // Descending order (higher correct answers first)
+        return b.score - a.score; // Higher score first
     });
 
     res.json({
@@ -71,7 +78,7 @@ router.post('/submit-answer', async (req, res) => {
       timestamp: new Date(),
       leaderboard: leaderboard.map(u => ({
         username: u.username,
-        correctCount: u.totalCorrectAnswers,
+        score: u.totalScore,
         lastCorrectTimestamp: Array.from(u.completedTasks.values()).pop()?.timestamp
       }))
     });
@@ -92,17 +99,17 @@ router.get('/leaderboard', async (req, res) => {
   
         return {
           username: u.username,
-          correctCount: u.totalCorrectAnswers,
+          score: u.totalScore,
           lastCorrectTimestamp,
         };
       });
   
       // Sort leaderboard by correct answers and then by the most recent timestamp (earlier timestamp ranks higher)
       leaderboardData.sort((a, b) => {
-        if (b.correctCount === a.correctCount) {
-          return new Date(a.lastCorrectTimestamp) - new Date(b.lastCorrectTimestamp); // Ascending order (earlier timestamp first)
+        if (b.score === a.score) {
+            return new Date(a.lastCorrectTimestamp) - new Date(b.lastCorrectTimestamp); // Earlier timestamp first
         }
-        return b.correctCount - a.correctCount; // Descending order (higher correct answers first)
+        return b.score - a.score; // Higher score first
       });
   
       res.json({

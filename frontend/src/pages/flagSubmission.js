@@ -120,8 +120,8 @@ const FlagSubmission = () => {
         <thead>
           <tr className="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
             <th className="py-3 px-4 text-left">Rank</th>
-            <th className="py-3 px-4 text-left">Name</th>
-            <th className="py-3 px-4 text-center">Correct Answers</th>
+            <th className="py-3 px-4 text-left">Team</th>
+            <th className="py-3 px-4 text-center">Score</th>
             <th className="py-3 px-4 text-left">Time</th>
           </tr>
         </thead>
@@ -135,7 +135,7 @@ const FlagSubmission = () => {
               <td className="py-3 px-4">{entry.username}</td>
               <td className="py-3 px-4 text-center">
                 <span className="bg-green-200 text-green-800 px-2 py-1 rounded-full">
-                  {entry.correctCount}
+                  {entry.score}
                 </span>
               </td>
               <td className="py-3 px-4">
@@ -161,7 +161,7 @@ const FlagSubmission = () => {
           <div className="mb-6">
             <div className="flex space-x-2">
               <Input 
-                placeholder="Enter your name"
+                placeholder="Enter your team name"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleUsernameSubmit()}

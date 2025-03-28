@@ -5,11 +5,10 @@ const UserSchema = new mongoose.Schema({
   completedTasks: { 
     type: Map, 
     of: {
-      timestamp: { type: Date, default: Date.now },
-      answer: String
+      timestamp: { type: Date, default: Date.now }
     }
   },
-  totalCorrectAnswers: { type: Number, default: 0 }
+  totalScore: { type: Number, default: 0 }
 });
 
 export default mongoose.model('User', UserSchema);
