@@ -76,11 +76,12 @@ router.post('/submit-answer', async (req, res) => {
       success: true, 
       message: 'FLAG submitted successfully',
       timestamp: new Date(),
-      leaderboard: leaderboard.map(u => ({
-        username: u.username,
-        score: u.totalScore,
-        lastCorrectTimestamp: Array.from(u.completedTasks.values()).pop()?.timestamp
-      }))
+      leaderboard: leaderboardData,
+    //   leaderboard: leaderboard.map(u => ({
+    //     username: u.username,
+    //     score: u.totalScore,
+    //     lastCorrectTimestamp: Array.from(u.completedTasks.values()).pop()?.timestamp
+    //   }))
     });
   } catch (error) {
     console.error(error);
@@ -90,34 +91,34 @@ router.post('/submit-answer', async (req, res) => {
 
 router.get('/leaderboard', async (req, res) => {
     try {
-      const leaderboard = await User.find();
+        const leaderboard = await User.find();
   
-      // Compute the most recent timestamp for each user
-      const leaderboardData = leaderboard.map(u => {
-        const lastCorrectTimestamp = Array.from(u.completedTasks.values())
-          .sort((a, b) => b.timestamp - a.timestamp)[0]?.timestamp;
-  
-        return {
-          username: u.username,
-          score: u.totalScore,
-          lastCorrectTimestamp,
-        };
-      });
-  
-      // Sort leaderboard by correct answers and then by the most recent timestamp (earlier timestamp ranks higher)
-      leaderboardData.sort((a, b) => {
-        if (b.score === a.score) {
-            return new Date(a.lastCorrectTimestamp) - new Date(b.lastCorrectTimestamp); // Earlier timestamp first
-        }
-        return b.score - a.score; // Higher score first
-      });
-  
-      res.json({
-        leaderboard: leaderboardData,
-      });
+        // Compute the most recent timestamp for each user
+        const leaderboardData = leaderboard.map(u => {
+            const lastCorrectTimestamp = Array.from(u.completedTasks.values())
+            .sort((a, b) => b.timestamp - a.timestamp)[0]?.timestamp;
+    
+            return {
+            username: u.username,
+            score: u.totalScore,
+            lastCorrectTimestamp,
+            };
+        });
+    
+        // Sort leaderboard by correct answers and then by the most recent timestamp (earlier timestamp ranks higher)
+        leaderboardData.sort((a, b) => {
+            if (b.score === a.score) {
+                return new Date(a.lastCorrectTimestamp) - new Date(b.lastCorrectTimestamp); // Earlier timestamp first
+            }
+            return b.score - a.score; // Higher score first
+        });
+    
+        res.json({
+            leaderboard: leaderboardData,
+        });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ success: false, message: 'Server error' });
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Server error' });
     }
 });  
 
