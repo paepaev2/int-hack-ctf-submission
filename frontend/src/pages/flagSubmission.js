@@ -162,7 +162,7 @@ const FlagSubmission = () => {
           <div className="mb-6">
             <div className="flex space-x-2">
               <Input 
-                placeholder="Enter your team name"
+                placeholder="Enter your team number, e.g. 31"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleUsernameSubmit()}
