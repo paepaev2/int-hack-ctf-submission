@@ -3,6 +3,7 @@ import '../index.css';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { submitAnswer, getLeaderboard, checkUsername } from '../services/apiService';
+import { RefreshCw } from 'lucide-react';
 
 const FlagSubmission = () => {
   const [username, setUsername] = useState('');
@@ -112,9 +113,9 @@ const FlagSubmission = () => {
     <div className="mt-8 bg-white rounded-lg shadow-md overflow-hidden">
       <div className="bg-gray-50 p-4 border-b flex justify-between items-center">
         <h2 className="text-2xl font-bold text-gray-800">Leaderboard</h2>
-        <Button onClick={refreshLeaderboard} variant="primary">
-          Refresh
-        </Button>
+        <button onClick={refreshLeaderboard} className='bg-gray-50 text-gray-600 opacity-50 px-4 py-2 rounded-md'>
+            <RefreshCw size={20} />
+        </button>
       </div>
       <table className="w-full">
         <thead>
